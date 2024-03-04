@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -25,16 +26,29 @@ public class UserController {
     }
 
     // Update
+//    @PutMapping("update/user/{id}")
+//    public List<User> updateUserById(@PathVariable int id, @RequestBody User user) {
+//        userDetails.forEach(userInfo -> {
+//            if (userInfo.getId() == id) {
+//                userInfo.setUsername(user.getUsername());
+//                userInfo.setLocation(user.getLocation());
+//            }
+//        });
+//        return userDetails;
+//    }
+
     @PutMapping("update/user/{id}")
-    public List<User> updateUserById(@PathVariable int id, @RequestBody User user) {
-        userDetails.forEach(userInfo -> {
+    public ResponseEntity<User> updateUserById(@PathVariable int id, @RequestBody User user) {
+        for (User userInfo : userDetails) {
             if (userInfo.getId() == id) {
                 userInfo.setUsername(user.getUsername());
                 userInfo.setLocation(user.getLocation());
+                return ResponseEntity.ok(userInfo); // Return ResponseEntity with updated user
             }
-        });
-        return userDetails;
+        }
+        return ResponseEntity.notFound().build(); // Return 404 Not Found if user with given id not found
     }
+
 
     // Delete
     @DeleteMapping("delete/user/{id}")
